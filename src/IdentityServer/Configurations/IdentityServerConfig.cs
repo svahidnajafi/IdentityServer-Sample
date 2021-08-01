@@ -20,12 +20,18 @@ namespace IdentityServer.Configurations
 
         public static readonly List<IdentityResource> IdentityResources = new List<IdentityResource>()
         {
-            new IdentityServer4.Models.IdentityResources.OpenId(),
-            new IdentityServer4.Models.IdentityResources.Profile(),
+            new IdentityResources.OpenId(),
+            new IdentityResources.Profile(),
+            new IdentityResource("userClaims", new string[]
+            {
+                "Developer",
+                "Scientist"
+            })
         };
 
         public static readonly List<Client> Clients = new List<Client>()
         {
+            // Client credentials flow
             new Client
             {
                 ClientId = "client_id",
@@ -39,6 +45,16 @@ namespace IdentityServer.Configurations
                 ClientSecrets = { new Secret("client_secret_top_secret".ToSha256()) },
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 AllowedScopes = {"ApiOne", "TopSecret"}
+            },
+            // Authorization code flow
+            new Client
+            {
+                AllowedGrantTypes = GrantTypes.Code,
+                ClientId = "client_id_mvc",
+                ClientSecrets = { new Secret("client_secret_mvc".ToSha256())},
+                RedirectUris = { "https://localhost:8001/signin-oidc" },
+                PostLogoutRedirectUris = {"https://localhost:8001/signout-callback-oidc"},
+                AllowedScopes = { "openid", "profile", "userClaims" }
             }
         };
     }

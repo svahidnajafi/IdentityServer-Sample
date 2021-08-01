@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using IdentityServer.Identity;
 using Microsoft.AspNetCore.Hosting;
@@ -27,23 +28,7 @@ namespace IdentityServer
                 {
                     var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
 
-                    //Developer Seeding
-                    if (await userManager.FindByNameAsync("dev") == null)
-                    {
-                        var developerUser = new ApplicationUser
-                        {
-                            UserName = "dev",
-                            Email = "Vahidnajafi.work@gmail.com",
-                            PhoneNumber = "+989307198828",
-                            FirstName = "Vahid",
-                            LastName = "Najafi",
-                            CreateDate = DateTime.Now
-                        };
-                        
-                        //creation
-                        await userManager.CreateAsync(developerUser, "password");
-                        // await userManager.AddClaimsAsync(developerUser, devClaims);
-                    }
+                    await Seed.SeedUsersAsync(userManager);
                 } 
                 
                 await host.RunAsync();

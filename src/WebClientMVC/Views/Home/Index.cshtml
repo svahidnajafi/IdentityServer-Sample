@@ -1,0 +1,51 @@
+﻿<h1>Hi, MVC Client Here !</h1>
+@if (User.Identity is {IsAuthenticated: true })
+{
+    <h2>
+        Welcome
+
+        @{
+            var nameClaim = User.Claims.FirstOrDefault(c => c.Type == "name");
+        }
+        @if (nameClaim != null)
+        {
+            @nameClaim.Value
+        }
+    </h2>
+    <div>
+        <ul>
+            @foreach (var claim in User.Claims)
+            {
+                <li>@claim.Type: @claim.Value</li>
+            }
+        </ul>
+    </div>
+    <div style="margin-top: 10px">
+        <ul>
+            <li><a asp-route="secret">Secret page</a></li>
+            @if (User.HasClaim("Developer", "true"))
+            {
+                <li><a asp-route="topSecret">Top secret page</a></li>
+            }
+            @if (User.HasClaim("Developer", "true") && User.HasClaim("Scientist", "true"))
+            {
+                <li><a asp-route="god">God page</a></li>
+            }
+            <li><a asp-route="topSecret" style="color: green">Top secret test page</a></li>
+            <li><a asp-route="god" style="color: red">god page test</a></li>
+        </ul>
+    </div>
+    <div style="margin-top: 10px">
+        <button type="button">
+            <a asp-route="signout">Sign Out</a>
+        </button>
+    </div>
+}
+@if (User.Identity == null || User.Identity is {IsAuthenticated: false })
+{
+    <div style="margin-top: 10px">
+        <button type="button">
+            <a asp-route="signin">Sign in</a>
+        </button>
+    </div>
+}

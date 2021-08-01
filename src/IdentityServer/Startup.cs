@@ -40,7 +40,7 @@ namespace IdentityServer
             services.AddIdentityServer()
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddInMemoryApiScopes(IdentityServerConfig.ApiScopes)
-                // .AddInMemoryApiResources(IdentityServerConfig.ApiResources)
+                .AddInMemoryApiResources(IdentityServerConfig.ApiResources)
                 .AddInMemoryIdentityResources(IdentityServerConfig.IdentityResources)
                 .AddInMemoryClients(IdentityServerConfig.Clients)
                 .AddDeveloperSigningCredential();

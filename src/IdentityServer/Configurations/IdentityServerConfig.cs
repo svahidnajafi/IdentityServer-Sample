@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using IdentityModel;
 using IdentityServer4.Models;
 
@@ -54,6 +55,17 @@ namespace IdentityServer.Configurations
                 ClientSecrets = { new Secret("client_secret_mvc".ToSha256())},
                 RedirectUris = { "https://localhost:8001/signin-oidc" },
                 PostLogoutRedirectUris = {"https://localhost:8001/signout-callback-oidc"},
+                AccessTokenLifetime = 30,
+                IdentityTokenLifetime = 30,
+                AuthorizationCodeLifetime = 30,
+                RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                
+                RefreshTokenExpiration = TokenExpiration.Absolute,
+                AbsoluteRefreshTokenLifetime = 60,
+                UpdateAccessTokenClaimsOnRefresh = true,
+                AllowOfflineAccess = true,
+                RequirePkce = true,
+
                 AllowedScopes = { "openid", "profile", "userClaims" }
             }
         };

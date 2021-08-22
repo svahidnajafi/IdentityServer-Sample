@@ -38,7 +38,7 @@ namespace IdentityServer.Controllers
             }
 
             // actual login
-            var signInResult = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
+            var signInResult = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, true, false);
 
             if (signInResult.Succeeded)
             {

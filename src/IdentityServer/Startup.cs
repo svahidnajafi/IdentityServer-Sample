@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using IdentityServer.Configurations;
 using IdentityServer.Data;
 using IdentityServer.Identity;
+using IdentityServer4;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace IdentityServer
 {
@@ -21,10 +23,7 @@ namespace IdentityServer
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseInMemoryDatabase("IdentityServerSample");
-            });
+            services.AddDbContext<AppDbContext>(options => { options.UseInMemoryDatabase("IdentityServerSample"); });
 
             services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
                 {
@@ -37,6 +36,7 @@ namespace IdentityServer
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.ConfigureApplicationCookie(options => { options.ExpireTimeSpan = TimeSpan.FromMinutes(30); });
             services.AddIdentityServer()
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddInMemoryApiScopes(IdentityServerConfig.ApiScopes)
@@ -56,6 +56,8 @@ namespace IdentityServer
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSerilogRequestLogging();
 
             app.UseIdentityServer();
 
